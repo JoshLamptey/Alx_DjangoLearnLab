@@ -1,0 +1,1 @@
+mo fe pami ni 
