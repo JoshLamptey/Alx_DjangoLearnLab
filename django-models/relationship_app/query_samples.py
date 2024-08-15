@@ -15,7 +15,8 @@ def books_by_author(request, author):
     }
     return render (request, context, 'relationship_app/books_by_author.html')
 def all_books(request):
-    all_books = Book.objects.all()
+    books = Library.objects.get(name=library_name)
+    books.all()
     context = {
         "all_books" : all_books,
     }
