@@ -9,7 +9,7 @@ from django.shortcuts import render
 
 
 def books_by_author(request, author):
-    books_by_author = Book.objects.filter(author=author)
+    books_by_author = Author.objects.get(name=author_name)
     context = {
         'books_by_author': books_by_author ,
     }
