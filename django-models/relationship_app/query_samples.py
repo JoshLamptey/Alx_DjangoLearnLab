@@ -24,7 +24,7 @@ def all_books(request):
     return render (request, context, 'relationship_app/all_books.html')
 
 def librarians(request):
-    librarian = Library.objects.get(librarian)
+    librarian = Librarian.objects.get(library=)
     
     context = {
         "librarian" : librarian,
