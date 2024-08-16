@@ -12,7 +12,7 @@ def books_by_author(author_name):
     books = Book.objects.filter(author=author)
     return books
 
-def all_books_in_a_library(llibrary_name):
+def all_books_in_a_library(library_name):
     library = Library.objects.get(name=library_name)
     books = library.books.all()
     books.all()
@@ -20,5 +20,5 @@ def all_books_in_a_library(llibrary_name):
 
 def librarian(library_name):
     library = Library.objects.get(name=library_name)
-    librarian = Librarian.objects.get(library=lilbrary)
+    librarian = Librarian.objects.get(library=library)
     return librarian
