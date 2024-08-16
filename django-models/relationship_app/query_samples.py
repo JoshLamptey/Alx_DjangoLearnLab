@@ -7,26 +7,18 @@ from django.shortcuts import render
 # List all books in a library.
 # Retrieve the librarian for a library.
 
+def books_by_author(author_name):
+    author = Author.objects.get(name=author_name)
+    books = Book.objects.filter(author=author)
+    return books
 
-def books_by_author(request, author):
-   books_by_author = Author.objects.get(name=author_name)
-   books_by_author = objects.filter(author=author)
-    context = {
-        'books_by_author': books_by_author ,
-    }
-    return render (request, context, 'relationship_app/books_by_author.html')
-def all_books(request):
-    books = Library.objects.get(name=library_name)
+def all_books_in_a_library(llibrary_name):
+    library = Library.objects.get(name=library_name)
+    books = library.books.all()
     books.all()
-    context = {
-        "all_books" : all_books,
-    }
-    return render (request, context, 'relationship_app/all_books.html')
+    return books
 
-def librarians(request):
-    librarian = Librarian.objects.get(library=)
-    
-    context = {
-        "librarian" : librarian,
-    }
-    return render (request, context, 'relationship_app/librarian.html')
+def librarian(library_name):
+    library = Library.objects.get(name=library_name)
+    librarian = Librarian.objects.get(library=lilbrary)
+    return librarian
