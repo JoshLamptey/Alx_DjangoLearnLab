@@ -7,10 +7,10 @@ from django.contrib.auth import login,authenticate
 from django.contrib.auth.decorators import user_passes_test
 
 #create your views here
-def books_list(request):
+def list_books(request):
     book_list = Book.objects.all()
     context = {
-        'book_list' : book_list,
+        'list_books' : list_books,
     }
     return render(request, 'relationship_app/list_books.html', context)
 
