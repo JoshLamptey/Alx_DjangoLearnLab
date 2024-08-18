@@ -77,3 +77,52 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
+
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    if request.method == "POST":
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('books')
+
+    else:
+        form = BookForm()
+
+        context = {
+            'form': form
+            }
+        return render(request, 'relationship_app/add_book.html', context)
+    
+
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid:
+            form.save()
+            return redirect(request, 'books')
+
+    else:
+        form = BookForm(instance=book)
+
+        context = {
+            'form': form
+             }
+        return render(request, 'relationship_app/edit_book.html', context)
+
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        book.delete()
+        return redirect('books')
+
+        context={
+            'book': book
+            }
+        return render(request, 'relationship_app/edit_book.html', context)
