@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Author,Book
 from .serializers import AuthorSerializer,BookSerializer
 
@@ -15,7 +15,6 @@ class CustomBookCreateView(generics.CreateAPIView):
 class CustomBookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CustomBookDeleteView(generics.DestroyAPIView):
@@ -32,5 +31,4 @@ class CustomBookUpdateView(generics.UpdateAPIView):
 class CustomBookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
