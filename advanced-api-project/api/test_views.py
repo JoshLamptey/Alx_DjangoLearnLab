@@ -80,7 +80,7 @@ class BooKAPITests(APITestCase):
 
 
         #unauthenticated update attempt 
-        response = self.client.post(create_url, {}, format='json')
+        response = self.client.post(update_url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         #unauthenticated delete attempt

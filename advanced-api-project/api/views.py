@@ -15,9 +15,9 @@ class CustomBookCreateView(generics.CreateAPIView):
 class CustomBookListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
-        return Book.objects.filter(book=user)
+        return Book.objects.filter("title", "author", "publication_year")
 
-        
+
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'author']
