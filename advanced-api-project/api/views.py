@@ -2,8 +2,11 @@ from django.shortcuts import render
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Author,Book
+from django_filters import rest_framework
 from .serializers import AuthorSerializer,BookSerializer
-
+filters.OrderingFilter
+filters.SearchFilter
+"title", "author", "publication_year"
 
 # Create your views here.
 class CustomBookCreateView(generics.CreateAPIView):
