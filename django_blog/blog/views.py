@@ -8,7 +8,6 @@ def register(request):
         form = UserCreationForm()
         if form.is_valid():
             form.save()
-        messages.success(request, 'Account created successfully ')
     else:
      form = UserCreationForm()
      context = {
