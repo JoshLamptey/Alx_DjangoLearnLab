@@ -15,6 +15,40 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow the site to be preloaded in HSTS lists
+
+# Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional security headers
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing of the site
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing by browsers
+SECURE_BROWSER_XSS_FILTER = True  # Enable the browser's XSS filtering
+
+# Handle HTTPS headers from the proxy server
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'https://stackpath.bootstrapcdn.com/')
+CSP_SCRIPT_SRC = ("'self'", 'https://code.jquery.com/')
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yourdomain.com']
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -22,8 +56,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--xqx6*h+iid&l8z^m3og9!t^4rpcgo&)=r)1h5c*75q0go8bjh'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
