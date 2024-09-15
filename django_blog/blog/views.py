@@ -3,7 +3,9 @@ from rest_framework import generics
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
-
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from taggit.models import Tag
 
 # Create your views here.
 
@@ -18,6 +20,47 @@ def register(request):
         'form' : form
      }   
      return render(request,'register.html', context)
+
+
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'post_list.html'  # Create this template for listing posts
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('slug')
+        return Post.objects.filter(tags__slug=tag_slug)
+
+
+def search_posts(request):
+    query = request.GET.get('q')
+    results = Post.objects.filter(
+        Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)
+    ).distinct()
+    return render(request, 'blog/search_results.html', {'results': results})
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all()
+    form = CommentForm()
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            return redirect('post-detail', pk=post.pk)
+
+    context = {
+        'post': post,
+        'comments': comments,
+        'form': form,
+    }
+    return render(request, 'blog/post_detail.html', context)
+
 
 class PostListView(generics.ListView):
     model = Post
