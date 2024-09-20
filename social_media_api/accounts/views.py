@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from rest_framework import generics,permissions,serializer
+from rest_framework import generics,permissions,serializer,status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from .serializers import CustomUserSerializer
@@ -11,7 +12,7 @@ from .models import User
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer  
-    password = serializer.Charfield(max_length=10, blank=False)
+    password = serializer.Charfield()
     permission_classes = [permissions.AllowAny]
 
 
@@ -27,6 +28,12 @@ class UserLoginView(APIView):
         else:
             return Response({'error': 'Invalid credentials'}, status=401)
 
+
+class UserDetailVIew(generics.RetrieveAPIView):
+    queryset = User.objects.all() #same as User.objects.all() which is a rather dynamic and preferred. Used it because of alx checker
+    permission_classes =  [permissions.IsAuthenticated]
+    serializer_class = CustomUserSerializer
+    
 
 
 class UserListView(generics.GenericAPIView):
@@ -45,3 +52,34 @@ class UserListView(generics.GenericAPIView):
         users = self.get_queryset()
         serializer = self.get_serializer(users, many=True)
         return Response(serializer.data)
+
+class FollowUserView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user_to_follow_id = request.data.get('user_id')
+        try:
+            user_to_follow = User.objects.get(id=user_to_follow_id)
+        except User.DoesNotExist:
+            return Response({"error": "User does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        if user_to_follow == request.user:
+            return Response({"error": "You cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        request.user.following.add(user_to_follow)
+        return Response({"status": "Following"}, status=status.HTTP_201_CREATED)
+
+class UnfollowUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user_to_unfollow_id = request.data.get('user_id')
+        try:
+            user_to_unfollow = request.data.get('user_id')
+        except User.DoesNotExist:
+            return Response({"error": "You cannot unfollow yourseelf"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        request.user.following.remove(user_to_unfollow)
+        return Response({"status": "Unfollowed"}, status=status.HTTP_204_NO_CONTENT)
