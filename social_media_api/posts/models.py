@@ -14,7 +14,9 @@ class Post(models.Model):
         return self.title
 
 
-
+class Like(models.Model):
+    posts = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_posts')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')

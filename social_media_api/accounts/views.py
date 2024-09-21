@@ -16,9 +16,6 @@ class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
-
-
-
 class UserLoginView(APIView):
     def post(self,request):
         user = get_user_model().objects.create_user
@@ -33,7 +30,7 @@ class UserDetailVIew(generics.RetrieveAPIView):
     queryset = User.objects.all() #same as User.objects.all() which is a rather dynamic and preferred. Used it because of alx checker
     permission_classes =  [permissions.IsAuthenticated]
     serializer_class = CustomUserSerializer
-    
+
 
 
 class UserListView(generics.GenericAPIView):
@@ -41,11 +38,11 @@ class UserListView(generics.GenericAPIView):
     View to list all users in the system.
     Only accessible to authenticated users.
     """
-    queryset = User.objects.all()  # Query all users
+    CustomUser = User
+    queryset = CustomUser.objects.all()  # Query all users
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
+    def get(self, request, ):
         """
         Return a list of all users.
         """
@@ -56,7 +53,7 @@ class UserListView(generics.GenericAPIView):
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, ):
         user_to_follow_id = request.data.get('user_id')
         try:
             user_to_follow = User.objects.get(id=user_to_follow_id)

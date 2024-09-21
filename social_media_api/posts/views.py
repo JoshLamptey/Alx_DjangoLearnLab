@@ -3,8 +3,9 @@ from rest_framework import viewsets, permissions, filters, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .models import Post, Comment
-from .serializer import PostSerializer, CommentSerializer
+from .models import Post, Comment,Like
+from .serializer import PostSerializer, CommentSerializer,LikeSerializer
+from notifications.models import Notification
 
 # Create your views here.
 
@@ -33,3 +34,18 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+class FeedView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        following= user.following.all()
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
+    
+
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = []
