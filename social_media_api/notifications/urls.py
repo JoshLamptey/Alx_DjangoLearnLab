@@ -16,4 +16,5 @@ urlpatterns = [
     path('/notifications/', notification_list , name='notification_list'),
     path('<int:pk>/', notification_detail, name='notification_detail'),
     path('mark_as_read/', NotificationView.as_view({'post': 'mark_as_read'}), name='notification-mark-as-read'),
+    
 ]

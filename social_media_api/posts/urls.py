@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet,LikeViewSet,FeedView
+from .views import PostViewSet, CommentViewSet,FeedView,like_post,unlike_post
 
 
 post_list = PostViewSet.as_view({
@@ -27,12 +27,12 @@ comment_detail = CommentViewSet.as_view({
     'delete': 'destroy'
 })
 
-like_list = LikeViewSet.as_view({
+like_list = like_post.as_view({
     'get': 'list',
     'post': 'create'
 })
 
-like_detail = LikeViewSet.as_view({
+like_detail = like_post.as_view({
     'get': 'retrieve',
     'delete': 'destroy'
 })
@@ -49,4 +49,5 @@ urlpatterns = [
     path('api/', include('posts.urls')),
     path('<int:pk>/like/', PostViewSet.as_view({'post': 'like'}), name='post-like'),
     path('<int:pk>/unlike/', PostViewSet.as_view({'post': 'unlike'}), name='post-unlike'),
+    path('feed/', FeedView.as_view({'get': 'feed'})),
 ]

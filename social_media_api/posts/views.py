@@ -6,10 +6,41 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Post, Comment,Like
 from .serializer import PostSerializer, CommentSerializer,LikeSerializer
 from notifications.models import Notification
+from rest_framework.decorators import action, api_view
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+
+
 
 # Create your views here.
 
+@api_view(['POST'])
+def like_post(request, pk):
+    post = generics.get_object_or_404(Post, pk=pk)
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+    if not created:
+        return JsonResponse({'message': 'You have already liked this post'})
+    
+
+    Notification.objects.create(
+        recipient=post.author,
+        actor=request.user,
+        verb='liked',
+        target=post
+    )
+
+    return JsonResponse({'message': ' Post liked successfully.'})
 #creating viewsets to handle CRUD operations
+
+@api_view(['POST'])
+def unlike_post(request, pk):
+    pass
+
+
+
+
+
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -42,8 +73,6 @@ class FeedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         following= user.following.all()
-        return Post.objects.filter(author__in=following_users).order_by('-created_at')
-    
 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
