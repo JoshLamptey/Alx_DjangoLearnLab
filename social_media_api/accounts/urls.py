@@ -3,8 +3,8 @@ from .views import UserRegistrationView, UserDetailView, UserLoginView, Unfollow
 
 
 urlpatterns = [
-    path("/login", UserLoginView.as_view(), name='user_login'),
-    path("/register", UserRegistrationView.as_view(), name='register'),
+    path("login/", UserLoginView.as_view(), name='user_login'),
+    path("register/", UserRegistrationView.as_view(), name='register'),
     path("profile/<int:pk>/", UserDetailView.as_view(), name='user-detail'),
     path("follow/<int:user_id>/",  FollowUserView.as_view(), name='follow-user'),
     path('unfollow/<int:user_id>/', UnfollowUserView.as_view(), name='unfollow_user'),
