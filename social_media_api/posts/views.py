@@ -31,19 +31,26 @@ def like_post(request, pk):
     )
 
     return JsonResponse({'message': ' Post liked successfully.'})
-#creating viewsets to handle CRUD operations
+
 
 @api_view(['POST'])
 def unlike_post(request, pk):
-    pass
+    post = get_object_or_404(Post,pk=pk )
+    like =  Like.objects.filter(user=request.user, post=post).first()
 
+    if not like:
+        return JsonResponse({'message': 'You haven’t liked this post yet.'})
+    
+    like.delete()
+
+    return JsonResponse({'message': 'Post unliked successfully'})
 
 
 
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(author__in=following_users).order_by
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter]
@@ -73,8 +80,3 @@ class FeedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         following= user.following.all()
-
-class LikeViewSet(viewsets.ModelViewSet):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
-    permission_classes = []
