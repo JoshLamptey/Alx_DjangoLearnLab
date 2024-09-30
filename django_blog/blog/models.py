@@ -1,20 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django import forms 
-from taggit.managers import TaggableManager
+
+
 
 # Create your models here.
+class Author(models.Model):
+    author = models.CharField(max_length=25, blank=False)
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    tags = TaggableManager
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
 # Comment model definition
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,14 +25,6 @@ class Comment(models.Model):
         return f'Comment by {self.author} on {self.post}'
 
 
-# CommentForm definition
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['content']
-
-    def clean_content(self):
-        content = self.cleaned_data.get('content')
-        if not content:
-            raise forms.ValidationError('Content cannot be empty.')
-        return content
+class Like(models.Model):
+    posts = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_post')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='liker')
