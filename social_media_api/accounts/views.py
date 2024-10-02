@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics,permissions,serializer,status
+from rest_framework import generics,permissions,serializers,status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -12,7 +12,7 @@ from .models import User
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer  
-    password = serializer.Charfield()
+    password = serializers.CharField()
     permission_classes = [permissions.AllowAny]
 
 
