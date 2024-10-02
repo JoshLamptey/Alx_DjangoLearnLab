@@ -14,25 +14,10 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Redirect all non-HTTPS requests to HTTPS
-SECURE_SSL_REDIRECT = True
-
-# HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
-SECURE_HSTS_PRELOAD = True  # Allow the site to be preloaded in HSTS lists
-
-# Ensure cookies are only sent over HTTPS
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 # Additional security headers
 X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing of the site
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing by browsers
 SECURE_BROWSER_XSS_FILTER = True  # Enable the browser's XSS filtering
-
-# Handle HTTPS headers from the proxy server
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Content Security Policy (CSP)
 CSP_DEFAULT_SRC = ("'self'",)
@@ -47,8 +32,8 @@ CSP_SCRIPT_SRC = ("'self'", 'https://code.jquery.com/')
 SECRET_KEY = 'django-insecure-fjgs*$#v6%$^vid8nb0hslvkotyrjle%t=kuu$b_%7=$9l88cl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yourdomain.com']
+DEBUG = True
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -147,3 +132,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"

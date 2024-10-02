@@ -8,13 +8,6 @@ from .models import Book
 
 # Create your views here.
 
-def example_view(request):
-    form = ExampleForm()
-    if request.method == 'POST':
-        form = ExampleForm(request.POST)
-        if form.is_valid():
-            pass
-    return render(request, 'bookshelf/form_example.html', {'form': form})
 
 
 @permission_required('bookshelf.can_edit', raise_exception=True)
