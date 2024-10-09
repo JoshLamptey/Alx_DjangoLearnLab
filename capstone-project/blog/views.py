@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets,filters,status
 from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required
 from rest_framework.pagination import PageNumberPagination
 from .models import Post,Comment,Category,CustomUser,Like
 from .serializers import CategorySerializer,CommentSerializer,PostSerializer,LikeSerializer,UserSerializer
