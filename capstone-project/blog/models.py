@@ -22,7 +22,9 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True,blank=True)
-
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=20, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Category(models.Model):

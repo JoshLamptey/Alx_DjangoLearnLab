@@ -1,13 +1,40 @@
 from django.shortcuts import render
 from rest_framework import viewsets,filters,status
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from rest_framework.authentication import authenticate
 from rest_framework.pagination import PageNumberPagination
 from .models import Post,Comment,Category,CustomUser,Like
 from .serializers import CategorySerializer,CommentSerializer,PostSerializer,LikeSerializer,UserSerializer
 
 
 # Create your views here.
+
+class LoginView(APIView):
+    def post (self, request, format=None):
+        data = request.data
+
+        username = data.get('username', None)
+        password = data.get('password', None)
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                response = {
+                    'message' : "Login successful",
+                    'user' : user
+                }
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()

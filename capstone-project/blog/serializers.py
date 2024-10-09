@@ -7,6 +7,7 @@ from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSeria
 class UserCreateSerializer(BaseUserRegistrationSerializer):
     class Meta(BaseUserRegistrationSerializer.Meta):
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']
+        
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
