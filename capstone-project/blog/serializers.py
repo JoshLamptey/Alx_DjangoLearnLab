@@ -10,9 +10,28 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
         
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'date_of_birth']
+        fields = ['id', 'email', 'username','password', 'date_of_birth', 'created_at']
+        read_only_fields = ['created_at']
+    
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = CustomUser(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        for attr,value in validated_data.items():
+            setattr(instance, attr, value)
+        if password:
+            instance.set_password(password)
+        instance.save() 
+        return instance
+
 
 
 class PostSerializer(serializers.ModelSerializer):

@@ -5,11 +5,11 @@ from taggit.managers import TaggableManager
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email,username, password=None, **extra_fields):
         if not email:
             raise ValueError('The email Field is not set please')
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -21,11 +21,18 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    date_of_birth = models.DateField(null=True,blank=True)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=20, blank=True, null=True)
+    date_of_birth = models.DateField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [
+        'username'
+    ]
 
 class Category(models.Model):
     category = models.CharField(max_length=30)

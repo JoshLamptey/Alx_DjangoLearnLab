@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path,include
-from .views import CategoryViewSet,CommentViewSet,PostViewSet,LoginView,CustomUserViewSet,LikeViewSet
+from .views import CategoryViewSet,CommentViewSet,PostViewSet,LoginView,CustomUserViewSet,LikeViewSet,RegisterView
 
 router = DefaultRouter()
 router.register(r'Posts', PostViewSet, basename='Posts')
@@ -11,6 +11,7 @@ router.register(r'Likes', LikeViewSet, basename='Likes')
 
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api/LoginView/', LoginView.as_view(), name='Login')
+    path('api/root/', include(router.urls)),
+    path('', LoginView.as_view(next_page='api/root/'), name='Login' ),
+    path('api/register/', RegisterView.as_view(), name='Register')
 ]

@@ -23,6 +23,17 @@ SECRET_KEY = 'django-insecure-jgp%_71+bffcw*sj7kurunxx(su=x3lq-rcjg9n8f*r8a*y-!i
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# Additional security headers
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing of the site
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing by browsers
+SECURE_BROWSER_XSS_FILTER = True  # Enable the browser's XSS filtering
+
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'https://stackpath.bootstrapcdn.com/')
+CSP_SCRIPT_SRC = ("'self'", 'https://code.jquery.com/')
+
+
 
 ALLOWED_HOSTS = []
 
@@ -118,7 +129,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = "" 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

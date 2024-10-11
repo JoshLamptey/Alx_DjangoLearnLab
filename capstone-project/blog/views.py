@@ -1,44 +1,31 @@
-from django.shortcuts import render
 from rest_framework import viewsets,filters,status
-from rest_framework.views import APIView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render,redirect
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 from rest_framework.authentication import authenticate
-from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 from .models import Post,Comment,Category,CustomUser,Like
 from .serializers import CategorySerializer,CommentSerializer,PostSerializer,LikeSerializer,UserSerializer
 
 
 # Create your views here.
+class RegisterView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
 
-class LoginView(APIView):
-    def post (self, request, format=None):
-        data = request.data
-
-        username = data.get('username', None)
-        password = data.get('password', None)
-
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                response = {
-                    'message' : "Login successful",
-                    'user' : user
-                }
-                return Response(response, status=status.HTTP_200_OK)
-            else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+class LoginView(LoginView):
+    template_name = 'login.html'
+    success_url = 'api/root/'
             
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
@@ -51,7 +38,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 
-class PostViewSet(viewsets.ModelViewSet):
+class PostViewSet(viewsets.ModelViewSet, LoginRequiredMixin):
+    login_url = ''
+    redirect_field_name = 'api/roots/Posts'
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
