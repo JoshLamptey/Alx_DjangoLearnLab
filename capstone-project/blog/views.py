@@ -16,6 +16,7 @@ class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
+#Simple loginview capitalising off django's loginview witha local template
 class LoginView(LoginView):
     template_name = 'login.html'
     success_url = 'api/root/'
@@ -37,7 +38,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
 
-
+#Post View with pagination, and a LoginRequiredMixin it also comes with the required filters
 class PostViewSet(viewsets.ModelViewSet, LoginRequiredMixin):
     login_url = ''
     redirect_field_name = 'api/roots/Posts'
@@ -61,6 +62,7 @@ class PostViewSet(viewsets.ModelViewSet, LoginRequiredMixin):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+#Like View
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer

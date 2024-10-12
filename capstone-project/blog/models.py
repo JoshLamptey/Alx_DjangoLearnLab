@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
-from taggit.managers import TaggableManager
 
 # Create your models here.
-
+#Custom User Manager since i am using Abstract User
 class CustomUserManager(BaseUserManager):
     def create_user(self, email,username, password=None, **extra_fields):
         if not email:
@@ -19,7 +18,7 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(self, email, password, **extra_fields)
 
-
+#User Model
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=20, blank=True, null=True)
@@ -33,19 +32,19 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = [
         'username'
     ]
-
+#model for the categories
 class Category(models.Model):
     category = models.CharField(max_length=30)
 
-
+# Post model
 class Post(models.Model):
     title = models.CharField(max_length=250)
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
     categories = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='+' )
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='post')
-    tags = TaggableManager()
 
+#comment feature model
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='commenter')
@@ -55,7 +54,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
-    
+
+#Like feature model    
 class Like(models.Model):
     posts = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_posts')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='liker')

@@ -1,14 +1,7 @@
 from rest_framework import serializers
 from .models import CustomUser,Comment,Category,Post,Like
-from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
 
-
-
-class UserCreateSerializer(BaseUserRegistrationSerializer):
-    class Meta(BaseUserRegistrationSerializer.Meta):
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']
-        
-
+#User serialiser with password hashing for the user create and update functions
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     class Meta:
@@ -33,23 +26,27 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-
+#Post serialilser 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['title', 'content', 'published_date', 'author', 'categories']
      
-
+#comment serialiser
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['post', 'author', 'content', 'created_at', 'updated_at']
-     
+
+#category serialiser     
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['category']
 
+
+
+#like serialiser
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like

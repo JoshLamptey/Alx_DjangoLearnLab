@@ -1,5 +1,4 @@
-this project has been a learning experience 
-and to qoute the iconic developer
-"At the time of deploy, Only God and I know how this code works, after a month it will be only God," so proceed with caution !
-but on a more serious note this project has taught me that I have a lot more to learn, and a lot more practicing to do.
-But this is my submission for my capstone project!
+This is a repository for a blogging platform api
+it is my final capstone project.
+You have to be logged in to use the crud operations of this api 
+it comes with a comment and like features that you can customise and add to your front-end
